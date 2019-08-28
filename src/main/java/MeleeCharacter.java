@@ -6,7 +6,7 @@ public class MeleeCharacter extends Character {
     public void damage(Character victim, int damagePoints) {
         Character attacker = this;
 
-        if (attacker != victim && isInRangeToVictim(victim, MAX_MELEE_RANGE)) {
+        if (attacker != victim && isInRangeToVictim(victim, MAX_MELEE_RANGE) && !isAlly(victim)) {
 
             double finalDamagePoints = damagePoints;
 

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Character {
@@ -10,14 +9,22 @@ public class Character {
     private double health = MAX_HEALTH_POINTS;
     private int level = INITIAL_LEVEL;
     private int position = 1;
-    private List<String> factions = new ArrayList<>();
+    private List<Faction> factions = new ArrayList<>();
 
+    public void setFactions(List<Faction> factions) {
+        this.factions = factions;
+    }
 
     protected void damage(Character victim, int damagePoints) {
     }
 
     protected boolean isInRangeToVictim(Character victim, int range) {
         return Math.floorMod(this.getPosition(), victim.getPosition()) <= range;
+    }
+
+    protected boolean isAlly(Character character) {
+        return this.getFactions().stream()
+                .anyMatch(faction -> character.getFactions().contains(faction));
     }
 
     protected boolean canDealExtraDamageTo(Character victim) {
@@ -33,20 +40,23 @@ public class Character {
         this.health = healthPoints;
     }
 
-    public void heal(int healPoints) {
-        if (!this.isAlive()) {
+    public void heal(Character damaged, int healPoints) {
+        if (!damaged.isAlive()) {
             return;
         }
 
-        if (areHealingPointsExceedingMaxHealth(healPoints)) {
-            this.setHealth(MAX_HEALTH_POINTS);
-        } else {
-            this.health += healPoints;
+        if(isAlly(damaged)) {
+            if (areHealingPointsExceedingMaxHealth(damaged, healPoints)) {
+                damaged.setHealth(MAX_HEALTH_POINTS);
+            } else {
+                damaged.setHealth(damaged.getHealth() + healPoints);
+            }
         }
+
     }
 
-    private boolean areHealingPointsExceedingMaxHealth(int healPoints) {
-        return this.health + healPoints > MAX_HEALTH_POINTS;
+    private boolean areHealingPointsExceedingMaxHealth(Character character, int healPoints) {
+        return character.getHealth() + healPoints > MAX_HEALTH_POINTS;
     }
 
 
@@ -74,19 +84,15 @@ public class Character {
         return position;
     }
 
-    public List<String> getFactions() {
+    public List<Faction> getFactions() {
         return factions;
     }
 
-    public void setFactions(List<String> factions) {
-        this.factions = factions;
+    public void join(Faction faction) {
+        factions.add(faction);
     }
 
-    public void joinFaction(String factionName) {
-        factions.add(factionName);
-    }
-
-    public void leftFaction(String factionName) {
-        factions.remove(factionName);
+    public void left(Faction faction) {
+        factions.remove(faction);
     }
 }

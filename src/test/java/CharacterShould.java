@@ -1,5 +1,8 @@
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
@@ -42,10 +45,10 @@ public class CharacterShould {
     @Test
     public void be_healed_when_he_heals_himself() {
         Character victim = new Character();
-        Character attacker = new MeleeCharacter();
-        attacker.damage(victim, 500);
+        victim.setHealth(500);
+        victim.setFactions(Arrays.asList(new Faction("Faction I")));
 
-        victim.heal(200);
+        victim.heal(victim,200);
 
         assertThat(victim.getHealth(), is(700.0));
     }
@@ -53,10 +56,10 @@ public class CharacterShould {
     @Test
     public void not_be_healed_when_is_dead() {
         Character victim = new Character();
-        Character attacker = new MeleeCharacter();
-        attacker.damage(victim, 1050);
+        Character character = new MeleeCharacter();
+        character.damage(victim, 1050);
 
-        attacker.heal(200);
+        character.heal(victim, 200);
 
         assertThat(victim.getHealth(), is(-50.0));
         assertFalse(victim.isAlive());
@@ -65,10 +68,10 @@ public class CharacterShould {
     @Test
     public void be_healed_by_1000_when_is_healed_exceeds_1000() {
         Character victim = new Character();
-        Character attacker = new MeleeCharacter();
-        attacker.damage(victim, 500);
+        victim.setHealth(500);
+        victim.setFactions(Arrays.asList(new Faction("Faction I")));
 
-        victim.heal(10000);
+        victim.heal(victim, 10000);
 
         assertThat(victim.getHealth(), is(1000.0));
     }
@@ -140,18 +143,46 @@ public class CharacterShould {
     public void have_one_faction_when_he_joins_a_faction() {
         Character character = new Character();
 
-        character.joinFaction("Faction I");
+        Faction faction = new Faction("Faction I");
 
-        assertTrue(character.getFactions().contains("Faction I"));
+        character.join(faction);
+
+        assertTrue(character.getFactions().contains(faction));
     }
 
     @Test
     public void have_zero_faction_when_he_leaves_his_unique_faction() {
         Character character = new Character();
 
-        character.joinFaction("Faction I");
-        character.leftFaction("Faction I");
+        Faction faction = new Faction("Faction I");
 
-        assertFalse(character.getFactions().contains("Faction I"));
+        character.join(faction);
+        character.left(faction);
+
+        assertFalse(character.getFactions().contains(faction));
+    }
+
+    @Test
+    public void not_deal_damage_to_ally() {
+        Character attacker = new RangedCharacter();
+        Character victim = new Character();
+        attacker.setFactions(Arrays.asList(new Faction("Faction I")));
+        victim.setFactions(Arrays.asList(new Faction("Faction I")));
+
+        attacker.damage(victim, 200);
+
+        assertThat(victim.getHealth(), is(1000.0));
+    }
+
+    @Test
+    public void heal_damage_to_ally() {
+        Character healer = new RangedCharacter();
+        Character damaged = new Character();
+        healer.setFactions(Arrays.asList(new Faction("Faction I")));
+        damaged.setFactions(Arrays.asList(new Faction("Faction I")));
+
+        healer.heal(damaged, 200);
+
+        assertThat(damaged.getHealth(), is(1000.0));
     }
 }

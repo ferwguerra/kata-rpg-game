@@ -6,7 +6,7 @@ public class RangedCharacter extends Character {
     public void damage(Character victim, int damagePoints) {
         Character attacker = this;
 
-        if (attacker != victim && isInRangeToVictim(victim, MAX_RANGED_RANGE)) {
+        if (attacker != victim && isInRangeToVictim(victim, MAX_RANGED_RANGE) && !isAlly(victim)) {
 
             double finalDamagePoints = damagePoints;
 
