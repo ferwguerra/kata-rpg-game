@@ -12,15 +12,15 @@ public class Character {
 
         if (attacker != victim) {
 
-            double healthPointsAfterDamage = victim.getHealth() - damagePoints;
+            double finalDamagePoints = damagePoints;
 
             if (hasLevelForReduceDamage(victim)) {
-                healthPointsAfterDamage = victim.getHealth() - damagePoints / 2;
+                finalDamagePoints = damagePoints / 2;
             } else if (canDealExtraDamageTo(victim)) {
-                healthPointsAfterDamage = victim.getHealth() - damagePoints * 1.5;
+                finalDamagePoints = damagePoints * 1.5;
             }
 
-            victim.setHealth(healthPointsAfterDamage);
+            victim.setHealth(victim.getHealth() - finalDamagePoints);
         }
 
     }
