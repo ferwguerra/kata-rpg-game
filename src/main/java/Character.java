@@ -12,10 +12,24 @@ public class Character {
     private List<Faction> factions = new ArrayList<>();
 
     protected void damages(Character victim, int damagePoints) {
+        Character attacker = this;
+
+        if (attacker != victim && isInRangeToVictim(victim) && !isAlly(victim)) {
+
+            double finalDamagePoints = damagePoints;
+
+            if (hasLevelForReduceDamage(victim)) {
+                finalDamagePoints = damagePoints / 2;
+            } else if (canDealExtraDamageTo(victim)) {
+                finalDamagePoints = damagePoints * 1.5;
+            }
+
+            victim.setHealth(victim.getHealth() - finalDamagePoints);
+        }
     }
 
-    protected boolean isInRangeToVictim(Character victim, int range) {
-        return Math.floorMod(this.getPosition(), victim.getPosition()) <= range;
+    protected boolean isInRangeToVictim(Character victim) {
+        return false;
     }
 
     protected boolean isAlly(Character character) {
