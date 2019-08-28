@@ -7,28 +7,30 @@ public class Character {
 
 
     public void damage(Character character, int damagePoints) {
-        character.setHealth(character.getHealth() - damagePoints);
+        if (character != this) {
+            character.setHealth(character.getHealth() - damagePoints);
+        }
+
     }
 
     private void setHealth(int healthPoints) {
         this.health = healthPoints;
     }
 
-    public void heal(Character character, int healPoints) {
-        if (!character.isAlive()) {
+    public void heal(int healPoints) {
+        if (!this.isAlive()) {
             return;
         }
 
-        if (areHealingPointsExceedingMaxHealth(character, healPoints)) {
-            character.setHealth(MAX_HEALTH_POINTS);
+        if (areHealingPointsExceedingMaxHealth(healPoints)) {
+            this.setHealth(MAX_HEALTH_POINTS);
         } else {
-            int currentHealth = character.getHealth();
-            character.setHealth(currentHealth + healPoints);
+            this.health += healPoints;
         }
     }
 
-    private boolean areHealingPointsExceedingMaxHealth(Character character, int healPoints) {
-        return character.getHealth() + healPoints > MAX_HEALTH_POINTS;
+    private boolean areHealingPointsExceedingMaxHealth(int healPoints) {
+        return this.health + healPoints > MAX_HEALTH_POINTS;
     }
 
 

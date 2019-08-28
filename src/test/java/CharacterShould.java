@@ -40,12 +40,12 @@ public class CharacterShould {
     }
 
     @Test
-    public void be_healed_when_is_healed_by_another_character() {
+    public void be_healed_when_he_heals_himself() {
         Character characterDamaged = new Character();
         Character character = new Character();
         character.damage(characterDamaged, 500);
 
-        character.heal(characterDamaged, 200);
+        characterDamaged.heal(200);
 
         assertThat(characterDamaged.getHealth(), is(700));
     }
@@ -56,7 +56,7 @@ public class CharacterShould {
         Character character = new Character();
         character.damage(characterDamaged, 1050);
 
-        character.heal(characterDamaged, 200);
+        character.heal(200);
 
         assertThat(characterDamaged.getHealth(), is(-50));
         assertFalse(characterDamaged.isAlive());
@@ -68,9 +68,16 @@ public class CharacterShould {
         Character character = new Character();
         character.damage(characterDamaged, 500);
 
-        character.heal(characterDamaged, 10000);
+        characterDamaged.heal(10000);
 
         assertThat(characterDamaged.getHealth(), is(1000));
+    }
+
+    @Test
+    public void have_same_health_points_when_he_tries_to_damage_himself() {
+        Character character = new Character();
+        character.damage(character, 50);
+        assertThat(character.getHealth(), is(1000));
     }
 
 }
