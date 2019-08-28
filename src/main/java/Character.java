@@ -5,10 +5,11 @@ public class Character {
     public static final int MAX_HEALTH_POINTS = 1000;
     public static final int INITIAL_LEVEL = 1;
     public static final int LEVEL_DIFFERENCE_FOR_EXTRA_DAMAGE = 5;
+    public static final int INITIAL_POSITION = 1;
 
     private double health = MAX_HEALTH_POINTS;
     private int level = INITIAL_LEVEL;
-    private int position = 1;
+    private int position = INITIAL_POSITION;
     private List<Faction> factions = new ArrayList<>();
 
     protected void damages(Character victim, int damagePoints) {
@@ -26,6 +27,10 @@ public class Character {
 
             victim.setHealth(victim.getHealth() - finalDamagePoints);
         }
+    }
+
+    public void damages(LivingBeing victim, int damagePoints) {
+        victim.setHealth(victim.getHealth() - damagePoints);
     }
 
     protected boolean isInRangeToVictim(Character victim) {
@@ -55,7 +60,7 @@ public class Character {
             return;
         }
 
-        if(isAlly(damaged)) {
+        if (isAlly(damaged)) {
             if (areHealingPointsExceedingMaxHealth(damaged, healPoints)) {
                 damaged.setHealth(MAX_HEALTH_POINTS);
             } else {

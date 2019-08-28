@@ -184,4 +184,26 @@ public class CharacterShould {
 
         assertThat(damaged.getHealth(), is(1000.0));
     }
+
+    @Test
+    public void reduce_non_character_living_being_health_when_he_attacks_living_being() {
+        LivingBeing tree = new LivingBeing(2000);
+        Character attacker = new RangedCharacter();
+
+        attacker.damages(tree, 1000);
+
+
+        assertThat(tree.getHealth(), is(1000.0));
+    }
+
+    @Test
+    public void destroy_living_being_when_he_reduces_health_to_zero() {
+        LivingBeing tree = new LivingBeing(2000);
+        Character attacker = new RangedCharacter();
+
+        attacker.damages(tree, 2000);
+
+
+        assertTrue(tree.isDestroyed());
+    }
 }
