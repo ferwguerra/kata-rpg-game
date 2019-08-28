@@ -8,7 +8,7 @@ public class CharacterShould {
     @Test
     public void be_created_with_1000_health_points() {
         Character character = new Character();
-        assertThat(character.getHealth(), is(1000));
+        assertThat(character.getHealth(), is(1000.0));
     }
 
     @Test
@@ -28,7 +28,7 @@ public class CharacterShould {
         Character characterDamaged = new Character();
         Character character = new Character();
         character.damage(characterDamaged, 50);
-        assertThat(characterDamaged.getHealth(), is(950));
+        assertThat(characterDamaged.getHealth(), is(950.0));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class CharacterShould {
 
         characterDamaged.heal(200);
 
-        assertThat(characterDamaged.getHealth(), is(700));
+        assertThat(characterDamaged.getHealth(), is(700.0));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class CharacterShould {
 
         character.heal(200);
 
-        assertThat(characterDamaged.getHealth(), is(-50));
+        assertThat(characterDamaged.getHealth(), is(-50.0));
         assertFalse(characterDamaged.isAlive());
     }
 
@@ -70,14 +70,40 @@ public class CharacterShould {
 
         characterDamaged.heal(10000);
 
-        assertThat(characterDamaged.getHealth(), is(1000));
+        assertThat(characterDamaged.getHealth(), is(1000.0));
     }
 
     @Test
     public void have_same_health_points_when_he_tries_to_damage_himself() {
         Character character = new Character();
         character.damage(character, 50);
-        assertThat(character.getHealth(), is(1000));
+        assertThat(character.getHealth(), is(1000.0));
+    }
+
+    @Test
+    public void reduce_half_health_points_when_attacker_is_5_levels_or_more_below() {
+        Character victim = new Character();
+        victim.setLevel(10);
+
+        Character attacker = new Character();
+        attacker.setLevel(2);
+
+        attacker.damage(victim, 1000);
+
+        assertThat(victim.getHealth(), is(500.0));
+    }
+
+    @Test
+    public void increase_half_health_points_when_attacker_is_5_levels_or_more_above() {
+        Character victim = new Character();
+        victim.setLevel(2);
+
+        Character attacker = new Character();
+        attacker.setLevel(10);
+
+        attacker.damage(victim, 250);
+
+        assertThat(victim.getHealth(), is(625.0));
     }
 
 }

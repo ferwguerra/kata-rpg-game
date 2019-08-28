@@ -2,18 +2,28 @@ public class Character {
     public static final int MAX_HEALTH_POINTS = 1000;
     public static final int INITIAL_LEVEL = 1;
 
-    private int health = MAX_HEALTH_POINTS;
+    private double health = MAX_HEALTH_POINTS;
     private int level = INITIAL_LEVEL;
 
 
-    public void damage(Character character, int damagePoints) {
-        if (character != this) {
-            character.setHealth(character.getHealth() - damagePoints);
+    public void damage(Character victim, int damagePoints) {
+        Character attacker = this;
+
+        if (attacker != victim) {
+
+            if (victim.getLevel() - attacker.getLevel() >= 5) {
+                victim.setHealth(victim.getHealth() - damagePoints / 2);
+            } else if (attacker.getLevel() - victim.getLevel() >= 5) {
+                victim.setHealth(victim.getHealth() - damagePoints * 1.5);
+            } else {
+                victim.setHealth(victim.getHealth() - damagePoints);
+            }
         }
 
     }
 
-    private void setHealth(int healthPoints) {
+
+    private void setHealth(double healthPoints) {
         this.health = healthPoints;
     }
 
@@ -34,7 +44,7 @@ public class Character {
     }
 
 
-    public int getHealth() {
+    public double getHealth() {
         return this.health;
     }
 
@@ -44,5 +54,9 @@ public class Character {
 
     public boolean isAlive() {
         return health > 0;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }
