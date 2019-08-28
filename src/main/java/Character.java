@@ -1,6 +1,7 @@
 public class Character {
     public static final int MAX_HEALTH_POINTS = 1000;
     public static final int INITIAL_LEVEL = 1;
+    public static final int LEVEL_DIFFERENCE_FOR_EXTRA_DAMAGE = 5;
 
     private double health = MAX_HEALTH_POINTS;
     private int level = INITIAL_LEVEL;
@@ -11,15 +12,25 @@ public class Character {
 
         if (attacker != victim) {
 
-            if (victim.getLevel() - attacker.getLevel() >= 5) {
-                victim.setHealth(victim.getHealth() - damagePoints / 2);
-            } else if (attacker.getLevel() - victim.getLevel() >= 5) {
-                victim.setHealth(victim.getHealth() - damagePoints * 1.5);
-            } else {
-                victim.setHealth(victim.getHealth() - damagePoints);
+            double healthPointsAfterDamage = victim.getHealth() - damagePoints;
+
+            if (hasLevelForReduceDamage(victim)) {
+                healthPointsAfterDamage = victim.getHealth() - damagePoints / 2;
+            } else if (canDealExtraDamageTo(victim)) {
+                healthPointsAfterDamage = victim.getHealth() - damagePoints * 1.5;
             }
+
+            victim.setHealth(healthPointsAfterDamage);
         }
 
+    }
+
+    private boolean canDealExtraDamageTo(Character victim) {
+        return this.getLevel() - victim.getLevel() >= LEVEL_DIFFERENCE_FOR_EXTRA_DAMAGE;
+    }
+
+    private boolean hasLevelForReduceDamage(Character victim) {
+        return victim.getLevel() - this.getLevel() >= LEVEL_DIFFERENCE_FOR_EXTRA_DAMAGE;
     }
 
 
