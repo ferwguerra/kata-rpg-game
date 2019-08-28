@@ -25,52 +25,52 @@ public class CharacterShould {
 
     @Test
     public void reduce_health_to_other_characted_when_damaging_other_character() {
-        Character characterDamaged = new Character();
-        Character character = new MeleeCharacter();
-        character.damage(characterDamaged, 50);
-        assertThat(characterDamaged.getHealth(), is(950.0));
+        Character victim = new Character();
+        Character attacker = new MeleeCharacter();
+        attacker.damage(victim, 50);
+        assertThat(victim.getHealth(), is(950.0));
     }
 
     @Test
     public void die_when_health_drops_less_than_0() {
-        Character characterDamaged = new Character();
-        Character character = new MeleeCharacter();
-        character.damage(characterDamaged, 1050);
-        assertFalse(characterDamaged.isAlive());
+        Character victim = new Character();
+        Character attacker = new MeleeCharacter();
+        attacker.damage(victim, 1050);
+        assertFalse(victim.isAlive());
     }
 
     @Test
     public void be_healed_when_he_heals_himself() {
-        Character characterDamaged = new Character();
-        Character character = new MeleeCharacter();
-        character.damage(characterDamaged, 500);
+        Character victim = new Character();
+        Character attacker = new MeleeCharacter();
+        attacker.damage(victim, 500);
 
-        characterDamaged.heal(200);
+        victim.heal(200);
 
-        assertThat(characterDamaged.getHealth(), is(700.0));
+        assertThat(victim.getHealth(), is(700.0));
     }
 
     @Test
     public void not_be_healed_when_is_dead() {
-        Character characterDamaged = new Character();
-        Character character = new MeleeCharacter();
-        character.damage(characterDamaged, 1050);
+        Character victim = new Character();
+        Character attacker = new MeleeCharacter();
+        attacker.damage(victim, 1050);
 
-        character.heal(200);
+        attacker.heal(200);
 
-        assertThat(characterDamaged.getHealth(), is(-50.0));
-        assertFalse(characterDamaged.isAlive());
+        assertThat(victim.getHealth(), is(-50.0));
+        assertFalse(victim.isAlive());
     }
 
     @Test
     public void be_healed_by_1000_when_is_healed_exceeds_1000() {
-        Character characterDamaged = new Character();
-        Character character = new MeleeCharacter();
-        character.damage(characterDamaged, 500);
+        Character victim = new Character();
+        Character attacker = new MeleeCharacter();
+        attacker.damage(victim, 500);
 
-        characterDamaged.heal(10000);
+        victim.heal(10000);
 
-        assertThat(characterDamaged.getHealth(), is(1000.0));
+        assertThat(victim.getHealth(), is(1000.0));
     }
 
     @Test
@@ -128,5 +128,30 @@ public class CharacterShould {
         attacker.damage(victim, 500);
 
         assertThat(victim.getHealth(), is(500.0));
+    }
+
+    @Test
+    public void be_created_with_no_faction() {
+        Character character = new Character();
+        assertTrue(character.getFactions().isEmpty());
+    }
+
+    @Test
+    public void have_one_faction_when_he_joins_a_faction() {
+        Character character = new Character();
+
+        character.joinFaction("Faction I");
+
+        assertTrue(character.getFactions().contains("Faction I"));
+    }
+
+    @Test
+    public void have_zero_faction_when_he_leaves_his_unique_faction() {
+        Character character = new Character();
+
+        character.joinFaction("Faction I");
+        character.leftFaction("Faction I");
+
+        assertFalse(character.getFactions().contains("Faction I"));
     }
 }

@@ -6,7 +6,7 @@ public class MeleeCharacter extends Character {
     public void damage(Character victim, int damagePoints) {
         Character attacker = this;
 
-        if (attacker != victim && isInRangeToVictim(victim)) {
+        if (attacker != victim && isInRangeToVictim(victim, MAX_MELEE_RANGE)) {
 
             double finalDamagePoints = damagePoints;
 
@@ -18,9 +18,5 @@ public class MeleeCharacter extends Character {
 
             victim.setHealth(victim.getHealth() - finalDamagePoints);
         }
-    }
-
-    private boolean isInRangeToVictim(Character victim) {
-        return Math.floorMod(this.getPosition(), victim.getPosition()) <= MAX_MELEE_RANGE;
     }
 }

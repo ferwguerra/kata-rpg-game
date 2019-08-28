@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class Character {
     public static final int MAX_HEALTH_POINTS = 1000;
     public static final int INITIAL_LEVEL = 1;
@@ -6,9 +10,14 @@ public class Character {
     private double health = MAX_HEALTH_POINTS;
     private int level = INITIAL_LEVEL;
     private int position = 1;
+    private List<String> factions = new ArrayList<>();
 
 
     protected void damage(Character victim, int damagePoints) {
+    }
+
+    protected boolean isInRangeToVictim(Character victim, int range) {
+        return Math.floorMod(this.getPosition(), victim.getPosition()) <= range;
     }
 
     protected boolean canDealExtraDamageTo(Character victim) {
@@ -63,5 +72,21 @@ public class Character {
 
     public int getPosition() {
         return position;
+    }
+
+    public List<String> getFactions() {
+        return factions;
+    }
+
+    public void setFactions(List<String> factions) {
+        this.factions = factions;
+    }
+
+    public void joinFaction(String factionName) {
+        factions.add(factionName);
+    }
+
+    public void leftFaction(String factionName) {
+        factions.remove(factionName);
     }
 }
