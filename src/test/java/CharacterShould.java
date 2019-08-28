@@ -26,7 +26,7 @@ public class CharacterShould {
     @Test
     public void reduce_health_to_other_characted_when_damaging_other_character() {
         Character characterDamaged = new Character();
-        Character character = new Character();
+        Character character = new MeleeCharacter();
         character.damage(characterDamaged, 50);
         assertThat(characterDamaged.getHealth(), is(950.0));
     }
@@ -34,7 +34,7 @@ public class CharacterShould {
     @Test
     public void die_when_health_drops_less_than_0() {
         Character characterDamaged = new Character();
-        Character character = new Character();
+        Character character = new MeleeCharacter();
         character.damage(characterDamaged, 1050);
         assertFalse(characterDamaged.isAlive());
     }
@@ -42,7 +42,7 @@ public class CharacterShould {
     @Test
     public void be_healed_when_he_heals_himself() {
         Character characterDamaged = new Character();
-        Character character = new Character();
+        Character character = new MeleeCharacter();
         character.damage(characterDamaged, 500);
 
         characterDamaged.heal(200);
@@ -53,7 +53,7 @@ public class CharacterShould {
     @Test
     public void not_be_healed_when_is_dead() {
         Character characterDamaged = new Character();
-        Character character = new Character();
+        Character character = new MeleeCharacter();
         character.damage(characterDamaged, 1050);
 
         character.heal(200);
@@ -65,7 +65,7 @@ public class CharacterShould {
     @Test
     public void be_healed_by_1000_when_is_healed_exceeds_1000() {
         Character characterDamaged = new Character();
-        Character character = new Character();
+        Character character = new MeleeCharacter();
         character.damage(characterDamaged, 500);
 
         characterDamaged.heal(10000);
@@ -85,7 +85,7 @@ public class CharacterShould {
         Character victim = new Character();
         victim.setLevel(10);
 
-        Character attacker = new Character();
+        Character attacker = new MeleeCharacter();
         attacker.setLevel(2);
 
         attacker.damage(victim, 1000);
@@ -98,7 +98,7 @@ public class CharacterShould {
         Character victim = new Character();
         victim.setLevel(2);
 
-        Character attacker = new Character();
+        Character attacker = new MeleeCharacter();
         attacker.setLevel(10);
 
         attacker.damage(victim, 250);
@@ -106,4 +106,27 @@ public class CharacterShould {
         assertThat(victim.getHealth(), is(625.0));
     }
 
+    @Test
+    public void reduce_health_to_another_character_when_he_attacks_as_melee() {
+        Character victim = new Character();
+        victim.setPosition(50);
+        Character attacker = new MeleeCharacter();
+        attacker.setPosition(52);
+
+        attacker.damage(victim, 500);
+
+        assertThat(victim.getHealth(), is(500.0));
+    }
+
+    @Test
+    public void reduce_health_to_another_character_when_he_attacks_as_range() {
+        Character victim = new Character();
+        victim.setPosition(50);
+        Character attacker = new RangedCharacter();
+        attacker.setPosition(70);
+
+        attacker.damage(victim, 500);
+
+        assertThat(victim.getHealth(), is(500.0));
+    }
 }
