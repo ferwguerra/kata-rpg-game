@@ -3,7 +3,7 @@ public class RangedCharacter extends Character {
     public static final int MAX_RANGED_RANGE = 20;
 
     @Override
-    public void damage(Character victim, int damagePoints) {
+    public void damages(Character victim, int damagePoints) {
         Character attacker = this;
 
         if (attacker != victim && isInRangeToVictim(victim, MAX_RANGED_RANGE) && !isAlly(victim)) {

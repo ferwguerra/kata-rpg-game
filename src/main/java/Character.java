@@ -11,11 +11,7 @@ public class Character {
     private int position = 1;
     private List<Faction> factions = new ArrayList<>();
 
-    public void setFactions(List<Faction> factions) {
-        this.factions = factions;
-    }
-
-    protected void damage(Character victim, int damagePoints) {
+    protected void damages(Character victim, int damagePoints) {
     }
 
     protected boolean isInRangeToVictim(Character victim, int range) {
@@ -40,7 +36,7 @@ public class Character {
         this.health = healthPoints;
     }
 
-    public void heal(Character damaged, int healPoints) {
+    public void heals(Character damaged, int healPoints) {
         if (!damaged.isAlive()) {
             return;
         }
@@ -57,6 +53,14 @@ public class Character {
 
     private boolean areHealingPointsExceedingMaxHealth(Character character, int healPoints) {
         return character.getHealth() + healPoints > MAX_HEALTH_POINTS;
+    }
+
+    public void joins(Faction faction) {
+        factions.add(faction);
+    }
+
+    public void leaves(Faction faction) {
+        factions.remove(faction);
     }
 
 
@@ -88,11 +92,7 @@ public class Character {
         return factions;
     }
 
-    public void join(Faction faction) {
-        factions.add(faction);
-    }
-
-    public void left(Faction faction) {
-        factions.remove(faction);
+    public void setFactions(List<Faction> factions) {
+        this.factions = factions;
     }
 }

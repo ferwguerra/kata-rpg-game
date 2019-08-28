@@ -2,6 +2,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -30,7 +31,7 @@ public class CharacterShould {
     public void reduce_health_to_other_characted_when_damaging_other_character() {
         Character victim = new Character();
         Character attacker = new MeleeCharacter();
-        attacker.damage(victim, 50);
+        attacker.damages(victim, 50);
         assertThat(victim.getHealth(), is(950.0));
     }
 
@@ -38,7 +39,7 @@ public class CharacterShould {
     public void die_when_health_drops_less_than_0() {
         Character victim = new Character();
         Character attacker = new MeleeCharacter();
-        attacker.damage(victim, 1050);
+        attacker.damages(victim, 1050);
         assertFalse(victim.isAlive());
     }
 
@@ -48,7 +49,7 @@ public class CharacterShould {
         victim.setHealth(500);
         victim.setFactions(Arrays.asList(new Faction("Faction I")));
 
-        victim.heal(victim,200);
+        victim.heals(victim,200);
 
         assertThat(victim.getHealth(), is(700.0));
     }
@@ -57,9 +58,9 @@ public class CharacterShould {
     public void not_be_healed_when_is_dead() {
         Character victim = new Character();
         Character character = new MeleeCharacter();
-        character.damage(victim, 1050);
+        character.damages(victim, 1050);
 
-        character.heal(victim, 200);
+        character.heals(victim, 200);
 
         assertThat(victim.getHealth(), is(-50.0));
         assertFalse(victim.isAlive());
@@ -71,7 +72,7 @@ public class CharacterShould {
         victim.setHealth(500);
         victim.setFactions(Arrays.asList(new Faction("Faction I")));
 
-        victim.heal(victim, 10000);
+        victim.heals(victim, 10000);
 
         assertThat(victim.getHealth(), is(1000.0));
     }
@@ -79,7 +80,7 @@ public class CharacterShould {
     @Test
     public void have_same_health_points_when_he_tries_to_damage_himself() {
         Character character = new Character();
-        character.damage(character, 50);
+        character.damages(character, 50);
         assertThat(character.getHealth(), is(1000.0));
     }
 
@@ -87,11 +88,10 @@ public class CharacterShould {
     public void reduce_half_health_points_when_attacker_is_5_levels_or_more_below() {
         Character victim = new Character();
         victim.setLevel(10);
-
         Character attacker = new MeleeCharacter();
         attacker.setLevel(2);
 
-        attacker.damage(victim, 1000);
+        attacker.damages(victim, 1000);
 
         assertThat(victim.getHealth(), is(500.0));
     }
@@ -100,11 +100,10 @@ public class CharacterShould {
     public void increase_half_health_points_when_attacker_is_5_levels_or_more_above() {
         Character victim = new Character();
         victim.setLevel(2);
-
         Character attacker = new MeleeCharacter();
         attacker.setLevel(10);
 
-        attacker.damage(victim, 250);
+        attacker.damages(victim, 250);
 
         assertThat(victim.getHealth(), is(625.0));
     }
@@ -116,7 +115,7 @@ public class CharacterShould {
         Character attacker = new MeleeCharacter();
         attacker.setPosition(52);
 
-        attacker.damage(victim, 500);
+        attacker.damages(victim, 500);
 
         assertThat(victim.getHealth(), is(500.0));
     }
@@ -128,7 +127,7 @@ public class CharacterShould {
         Character attacker = new RangedCharacter();
         attacker.setPosition(70);
 
-        attacker.damage(victim, 500);
+        attacker.damages(victim, 500);
 
         assertThat(victim.getHealth(), is(500.0));
     }
@@ -142,10 +141,9 @@ public class CharacterShould {
     @Test
     public void have_one_faction_when_he_joins_a_faction() {
         Character character = new Character();
-
         Faction faction = new Faction("Faction I");
 
-        character.join(faction);
+        character.joins(faction);
 
         assertTrue(character.getFactions().contains(faction));
     }
@@ -153,11 +151,12 @@ public class CharacterShould {
     @Test
     public void have_zero_faction_when_he_leaves_his_unique_faction() {
         Character character = new Character();
-
         Faction faction = new Faction("Faction I");
+        List<Faction> factions = new ArrayList<>();
+        factions.add(faction);
+        character.setFactions(factions);
 
-        character.join(faction);
-        character.left(faction);
+        character.leaves(faction);
 
         assertFalse(character.getFactions().contains(faction));
     }
@@ -169,7 +168,7 @@ public class CharacterShould {
         attacker.setFactions(Arrays.asList(new Faction("Faction I")));
         victim.setFactions(Arrays.asList(new Faction("Faction I")));
 
-        attacker.damage(victim, 200);
+        attacker.damages(victim, 200);
 
         assertThat(victim.getHealth(), is(1000.0));
     }
@@ -181,7 +180,7 @@ public class CharacterShould {
         healer.setFactions(Arrays.asList(new Faction("Faction I")));
         damaged.setFactions(Arrays.asList(new Faction("Faction I")));
 
-        healer.heal(damaged, 200);
+        healer.heals(damaged, 200);
 
         assertThat(damaged.getHealth(), is(1000.0));
     }

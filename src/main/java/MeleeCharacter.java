@@ -3,7 +3,7 @@ public class MeleeCharacter extends Character {
     public static final int MAX_MELEE_RANGE = 2;
 
     @Override
-    public void damage(Character victim, int damagePoints) {
+    public void damages(Character victim, int damagePoints) {
         Character attacker = this;
 
         if (attacker != victim && isInRangeToVictim(victim, MAX_MELEE_RANGE) && !isAlly(victim)) {
