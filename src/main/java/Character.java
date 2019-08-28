@@ -28,7 +28,7 @@ public class Character {
     }
 
     private boolean areHealingPointsExceedingMaxHealth(Character character, int healPoints) {
-        return character.getHealth() + healPoints <= MAX_HEALTH_POINTS;
+        return character.getHealth() + healPoints > MAX_HEALTH_POINTS;
     }
 
 
